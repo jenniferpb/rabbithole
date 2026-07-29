@@ -303,8 +303,8 @@ body::after {
   align-items: center;
   gap: 0.4rem;
   padding: 0.35rem 0.5rem;
-  background: linear-gradient(180deg, #142014, #0c150c);
-  border-bottom: 1px solid var(--phosphor-dim);
+  background: linear-gradient(180deg, #1084d0, #0a5bab);
+  border-bottom: 1px solid #003c74;
 }
 
 .pin {
@@ -321,7 +321,7 @@ body::after {
   font-size: 0.68rem;
   letter-spacing: 0.4px;
   line-height: 1.2;
-  color: var(--phosphor);
+  color: #ffffff;
   text-transform: uppercase;
   flex: 1;
   word-break: break-word;
