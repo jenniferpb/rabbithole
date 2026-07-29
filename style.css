@@ -183,6 +183,24 @@ body::after {
   border-color: var(--phosphor);
 }
 
+.card-edit-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  background: none;
+  border: none;
+  color: var(--phosphor-dim);
+  opacity: 0;
+  cursor: pointer;
+  text-transform: lowercase;
+  padding: 0 0.3rem;
+  transition: opacity 0.12s ease;
+}
+
+.card:hover .card-edit-btn,
+.card-edit-btn:focus-visible {
+  opacity: 1;
+}
+
 /* ---------- connect banner ---------- */
 
 .connect-banner {
