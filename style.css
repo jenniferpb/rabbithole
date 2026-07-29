@@ -4,6 +4,7 @@
   --phosphor: #FFFFFF;
   --phosphor-dim: #F0F1F7;
   --phosphor-deep: #131578;
+  --blue: #0021FF;
   --amber: #ffb02e;
   --cyan: #35e2d6;
   --window-bg: #eef4ec;
@@ -29,8 +30,8 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  background: var(--black);
-  color: var(--phosphor);
+  background: var(--blue);
+  color: var(--blue);
   font-family: 'Share Tech Mono', monospace;
 }
 
@@ -39,7 +40,7 @@ html, body {
 /* ---------- board backdrop: photo ---------- */
 
 body {
-  background-color: var(--black);
+  background-color: var(--blue);
   background-image:
     linear-gradient(rgba(5,8,5,0.55), rgba(5,8,5,0.55)),
     url("board-bg.jpg");
@@ -74,7 +75,7 @@ body::after {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: var(--black);
+  background: var(--blue);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -118,7 +119,7 @@ body::after {
   justify-content: space-between;
   gap: 1rem;
   padding: 0.9rem 1.4rem;
-  background: var(--black-2);
+  background: var(--blue);
   border-bottom: 1px solid var(--phosphor-dim);
   box-shadow: 0 0 24px rgba(41,255,122,0.12);
   flex-wrap: wrap;
@@ -130,7 +131,7 @@ body::after {
   font-size: 1.4rem;
   letter-spacing: 1.5px;
   margin: 0;
-  color: var(--phosphor);
+  color: var(--black);
   text-shadow: 0 0 10px rgba(41,255,122,0.55);
 }
 
@@ -157,7 +158,7 @@ body::after {
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.78rem;
   background: var(--black);
-  color: var(--phosphor);
+  color: var(--black);
   border: 1px solid var(--phosphor-dim);
   border-radius: 2px;
   padding: 0.5rem 0.8rem;
@@ -166,15 +167,15 @@ body::after {
 }
 
 .tool-btn:hover {
-  border-color: var(--phosphor);
+  border-color: var(--black);
   box-shadow: 0 0 10px rgba(41,255,122,0.45);
 }
 .tool-btn:active { transform: translateY(1px); }
 
 .tool-btn-primary {
   background: var(--phosphor-deep);
-  color: var(--phosphor);
-  border-color: var(--phosphor);
+  color: var(--black);
+  border-color: var(--black);
 }
 
 .card-edit-btn {
@@ -204,8 +205,8 @@ body::after {
   transform: translateX(-50%);
   z-index: 25;
   background: var(--black-2);
-  color: var(--phosphor);
-  border: 1px solid var(--phosphor);
+  color: var(--blue);
+  border: 1px solid var(--blue);
   box-shadow: 0 0 16px rgba(41,255,122,0.4);
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.85rem;
@@ -256,15 +257,15 @@ body::after {
 
 .thread-line {
   fill: none;
-  stroke: var(--phosphor);
+  stroke: var(--blue);
   stroke-width: 2;
   opacity: 0.75;
   filter: drop-shadow(0 0 3px rgba(41,255,122,0.6));
 }
 
 .thread-via {
-  fill: var(--black);
-  stroke: var(--phosphor);
+  fill: var(--blue);
+  stroke: var(--blue);
   stroke-width: 1.5;
 }
 
@@ -294,7 +295,7 @@ body::after {
   width: 240px;
   background: var(--window-bg);
   border: 1px solid var(--phosphor-dim);
-  box-shadow: 0 0 0 1px var(--black), 0 6px 18px rgba(0,0,0,0.55), 0 0 14px rgba(41,255,122,0.15);
+  box-shadow: 0 0 0 1px var(--blue), 0 6px 18px rgba(0,0,0,0.55), 0 0 14px rgba(41,255,122,0.15);
   cursor: grab;
   user-select: none;
   transition: box-shadow 0.15s ease;
@@ -398,7 +399,7 @@ body::after {
   gap: 1rem;
   flex-wrap: wrap;
   padding: 0.5rem 1rem;
-  background: var(--black-2);
+  background: var(--blue);
   border-top: 1px solid var(--phosphor-dim);
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.7rem;
@@ -434,7 +435,7 @@ body::after {
 
 .card-form {
   background: var(--window-bg);
-  border: 1px solid var(--phosphor);
+  border: 1px solid var(--blue);
   box-shadow: 0 0 30px rgba(41,255,122,0.35);
   width: 100%;
   max-width: 380px;
@@ -450,7 +451,7 @@ body::after {
   padding: 0.5rem 0.75rem;
   background: linear-gradient(180deg, #142014, #0c150c);
   border-bottom: 1px solid var(--phosphor-dim);
-  color: var(--phosphor);
+  color: var(--blue);
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.78rem;
 }
@@ -550,6 +551,6 @@ input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
 .card:focus-visible {
-  outline: 2px solid var(--phosphor);
+  outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
