@@ -299,7 +299,7 @@ body::after {
   box-shadow: 0 0 0 1px var(--blue), 0 6px 18px rgba(0,0,0,0.55), 0 0 14px rgba(41,255,122,0.15);
   cursor: grab;
   user-select: none;
-  transition: box-shadow 0.15s ease;
+  transition: box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
 .card:active { cursor: grabbing; }
@@ -419,6 +419,23 @@ body::after {
   border-radius: 50%;
   display: inline-block;
   box-shadow: 0 0 5px 1px currentColor;
+}
+
+.legend-item {
+  cursor: pointer;
+}
+
+.legend-item-active {
+  text-decoration: underline;
+  color: var(--phosphor);
+}
+
+.card.card-glow {
+  box-shadow: 0 0 0 2px var(--glow-color), 0 0 26px 6px var(--glow-color);
+}
+
+.card.card-dim {
+  opacity: 0.35;
 }
 
 /* ---------- modal ---------- */
