@@ -218,6 +218,7 @@ if (isTitleCard) el.classList.add("card-title-only");
   editBtn.type = "button";
   editBtn.className = "card-edit-btn";
   editBtn.textContent = "edit";
+      editBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
   editBtn.addEventListener("click", (e) => {
     e.stopPropagation();
     openEditModal(node);
