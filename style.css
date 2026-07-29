@@ -12,6 +12,7 @@
   --ink: #10160f;
   --ink-soft: #3d4a3c;
   --link: #0645ad;
+  --white: #FFFFFF;
 
   --cat-smallpublishing: #29ff7a;
   --cat-politheory: #ffb02e;
@@ -131,7 +132,7 @@ body::after {
   font-size: 1.4rem;
   letter-spacing: 1.5px;
   margin: 0;
-  color: var(--black);
+  color: var(--white);
   text-shadow: 0 0 10px rgba(41,255,122,0.55);
 }
 
@@ -157,8 +158,8 @@ body::after {
 .tool-btn {
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.78rem;
-  background: var(--black);
-  color: var(--black);
+  background: var(--blue);
+  color: var(--white);
   border: 1px solid var(--phosphor-dim);
   border-radius: 2px;
   padding: 0.5rem 0.8rem;
