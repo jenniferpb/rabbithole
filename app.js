@@ -6,6 +6,7 @@ const CATEGORIES = {
   politicaltheory:     { label: "political theory",     color: "var(--cat-politheory)" },
   theology:       { label: "theology",   color: "var(--cat-theo)" },
   philosophy:       { label: "philosophy",   color: "var(--cat-phil)" },
+  currentevents: {label: "current events", color: "var(--cat-current)"},
   other:       { label: "other",        color: "var(--cat-other)" },
 };
 
