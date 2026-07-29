@@ -36,25 +36,17 @@ html, body {
 
 /* ---------- circuit board backdrop, no image assets ---------- */
 
+/* ---------- board backdrop: photo ---------- */
+
 body {
   background-color: var(--black);
   background-image:
-    /* component glow blobs */
-    radial-gradient(ellipse 500px 380px at 12% 15%, rgba(41,255,122,0.10), transparent 60%),
-    radial-gradient(ellipse 420px 420px at 88% 20%, rgba(53,226,214,0.08), transparent 60%),
-    radial-gradient(ellipse 480px 380px at 25% 88%, rgba(255,176,46,0.06), transparent 60%),
-    radial-gradient(ellipse 520px 420px at 78% 82%, rgba(41,255,122,0.08), transparent 60%),
-    /* solder pad dot grid */
-    radial-gradient(circle, rgba(41,255,122,0.16) 1px, transparent 1.4px),
-    /* circuit trace grid */
-    repeating-linear-gradient(0deg, rgba(41,255,122,0.05) 0 1px, transparent 1px 96px),
-    repeating-linear-gradient(90deg, rgba(41,255,122,0.05) 0 1px, transparent 1px 96px);
-  background-size:
-    auto, auto, auto, auto,
-    24px 24px,
-    96px 96px,
-    96px 96px;
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, repeat;
+    linear-gradient(rgba(5,8,5,0.55), rgba(5,8,5,0.55)),
+    url("board-bg.jpg");
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: fixed, fixed;
   position: relative;
 }
 
