@@ -532,12 +532,27 @@ function onCardClick(e, node) {
       (edge.source_id === node.id && edge.target_id === connectSource.id)
   );
 
-  if (!already) {
-    sb.from("edges").insert({
-      source_id: connectSource.id,
-      target_id: node.id,
-    }).then(({ error }) => { if (error) console.error(error); });
+  const sourceEl = cardEls.get(connectSource.id);
+
+  if (already) {
+    sourceEl.classList.remove("connect-source");
+    connectSource = null;
+    return;
   }
+
+  sb.from("edges").insert({
+    source_id: connectSource.id,
+    target_id: node.id,
+  }).then(({ error }) => {
+    if (error) {
+      console.error(error);
+      alert("trace failed — check the console for details.");
+      return; // stays highlighted so you can see something went wrong and retry
+    }
+    sourceEl.classList.remove("connect-source");
+    connectSource = null;
+  });
+}
 
   cardEls.get(connectSource.id).classList.remove("connect-source");
   connectSource = null;
