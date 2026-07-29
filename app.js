@@ -170,21 +170,12 @@ function subscribeRealtime() {
     .on("postgres_changes", { event: "UPDATE", schema: "public", table: "nodes" }, (payload) => {
       nodes.set(payload.new.id, payload.new);
       const el = cardEls.get(payload.new.id);
-      if (el && !el.dataset.dragging) {
-        el.style.left = payload.new.x + "px";
-        el.style.top = payload.new.y + "px";
-      }
+      if (!el || el.dataset.dragging) return;
+      el.remove();
+      cardEls.delete(payload.new.id);
+      renderCard(payload.new);
       redrawThreads();
     })
-  .on("postgres_changes", { event: "UPDATE", schema: "public", table: "nodes" }, (payload) => {
-  nodes.set(payload.new.id, payload.new);
-  const el = cardEls.get(payload.new.id);
-  if (!el || el.dataset.dragging) return;
-  el.remove();
-  cardEls.delete(payload.new.id);
-  renderCard(payload.new);
-  redrawThreads();
-})
     .subscribe();
 }
 
@@ -309,7 +300,62 @@ function openAddModal() {
   editingNodeId = null;
   document.getElementById("form-modal-title").textContent = "new_window.exe";
   addForm.querySelector('button[type="submit"]').textContent = "open_window";
-  // ...rest stays the same...
+
+  const rect = viewport.getBoundingClientRect();
+  const cx = (rect.width / 2 - view.tx) / view.scale;
+  const cy = (rect.height / 2 - view.ty) / view.scale;
+  pendingSpawn = {
+    x: cx - CARD_W / 2 + (Math.random() * 60 - 30),
+    y: cy - 20 + (Math.random() * 60 - 30),
+  };
+  addForm.reset();
+  modalBackdrop.classList.remove("hidden");
+  fTitle.focus();
+}
+
+function closeAddModal() {
+  modalBackdrop.classList.add("hidden");
+}
+
+addForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const title = fTitle.value.trim();
+  if (!title) return;
+
+  const fields = {
+    title,
+    notes: fNotes.value.trim(),
+    url: fUrl.value.trim() || null,
+    category: fCategory.value,
+    author: fAuthor.value.trim() || "anonymous",
+  };
+
+  const submitBtn = addForm.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+
+  let error, data;
+  if (editingNodeId) {
+    ({ error } = await sb.from("nodes").update(fields).eq("id", editingNodeId));
+  } else {
+    ({ data, error } = await sb.from("nodes").insert({
+      ...fields,
+      x: pendingSpawn.x,
+      y: pendingSpawn.y,
+      rotation: 0,
+    }).select().single());
+  }
+
+  submitBtn.disabled = false;
+
+  if (error) {
+    console.error(error);
+    alert(editingNodeId ? "edit failed — try again." : "window failed to open — try again in a moment.");
+    return;
+  }
+
+  if (data) addMyNode(data.id); // only fires on insert
+  closeAddModal();
+});
 
 function redrawThreads() {
   threadsSvg.innerHTML = "";
@@ -501,91 +547,6 @@ function setConnectMode(on) {
   }
   document.getElementById("btn-connect").classList.toggle("tool-btn-primary", on);
 }
-
-// ---------- add card modal ----------
-
-function openAddModal() {
-  const rect = viewport.getBoundingClientRect();
-  const cx = (rect.width / 2 - view.tx) / view.scale;
-  const cy = (rect.height / 2 - view.ty) / view.scale;
-  pendingSpawn = {
-    x: cx - CARD_W / 2 + (Math.random() * 60 - 30),
-    y: cy - 20 + (Math.random() * 60 - 30),
-  };
-  addForm.reset();
-  modalBackdrop.classList.remove("hidden");
-  fTitle.focus();
-}
-
-function closeAddModal() {
-  modalBackdrop.classList.add("hidden");
-}
-
-addForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const title = fTitle.value.trim();
-  if (!title) return;
-
-  const fields = {
-    title,
-    notes: fNotes.value.trim(),
-    url: fUrl.value.trim() || null,
-    category: fCategory.value,
-    author: fAuthor.value.trim() || "anonymous",
-  };
-
-  const submitBtn = addForm.querySelector('button[type="submit"]');
-  submitBtn.disabled = true;
-
-  let error, data;
-  if (editingNodeId) {
-    ({ error } = await sb.from("nodes").update(fields).eq("id", editingNodeId));
-  } else {
-    ({ data, error } = await sb.from("nodes").insert({
-      ...fields,
-      x: pendingSpawn.x,
-      y: pendingSpawn.y,
-      rotation: 0,
-    }).select().single());
-  }
-
-  submitBtn.disabled = false;
-
-  if (error) {
-    console.error(error);
-    alert(editingNodeId ? "edit failed — try again." : "window failed to open — try again in a moment.");
-    return;
-  }
-
-  if (data) addMyNode(data.id); // only fires on insert
-  closeAddModal();
-});
-
-  const row = {
-    title,
-    notes: fNotes.value.trim(),
-    url: fUrl.value.trim() || null,
-    category: fCategory.value,
-    author: fAuthor.value.trim() || "anonymous",
-    x: pendingSpawn.x,
-    y: pendingSpawn.y,
-    rotation: 0,
-  };
-
-  const submitBtn = addForm.querySelector('button[type="submit"]');
-  submitBtn.disabled = true;
-
-  const { error } = await sb.from("nodes").insert(row);
-  submitBtn.disabled = false;
-
-  if (error) {
-    console.error(error);
-    alert("window failed to open — try again in a moment.");
-    return;
-  }
-
-  closeAddModal();
-});
 
 // ---------- wire top-level controls ----------
 
