@@ -17,6 +17,21 @@ const CARD_W = 240;
 // ---------- state ----------
 
 const nodes = new Map();   // id -> node row
+const MY_NODES_KEY = "rabbithole_my_nodes";
+let editingNodeId = null;
+
+function getMyNodes() {
+  try { return JSON.parse(localStorage.getItem(MY_NODES_KEY) || "[]"); }
+  catch { return []; }
+}
+function addMyNode(id) {
+  const ids = getMyNodes();
+  ids.push(id);
+  localStorage.setItem(MY_NODES_KEY, JSON.stringify(ids));
+}
+function isMyNode(id) {
+  return getMyNodes().includes(id);
+}
 const edges = new Map();   // id -> edge row
 const cardEls = new Map(); // id -> DOM element
 
@@ -161,11 +176,15 @@ function subscribeRealtime() {
       }
       redrawThreads();
     })
-    .on("postgres_changes", { event: "INSERT", schema: "public", table: "edges" }, (payload) => {
-      if (edges.has(payload.new.id)) return;
-      edges.set(payload.new.id, payload.new);
-      redrawThreads();
-    })
+  .on("postgres_changes", { event: "UPDATE", schema: "public", table: "nodes" }, (payload) => {
+  nodes.set(payload.new.id, payload.new);
+  const el = cardEls.get(payload.new.id);
+  if (!el || el.dataset.dragging) return;
+  el.remove();
+  cardEls.delete(payload.new.id);
+  renderCard(payload.new);
+  redrawThreads();
+})
     .subscribe();
 }
 
@@ -201,6 +220,18 @@ if (isTitleCard) el.classList.add("card-title-only");
   title.className = "card-title";
   title.textContent = node.title;
   titlebar.appendChild(title);
+
+  if (isMyNode(node.id)) {
+  const editBtn = document.createElement("button");
+  editBtn.type = "button";
+  editBtn.className = "card-edit-btn";
+  editBtn.textContent = "edit";
+  editBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openEditModal(node);
+  });
+  titlebar.appendChild(editBtn);
+}
 
   const winButtons = document.createElement("span");
   winButtons.className = "card-winbuttons";
@@ -261,10 +292,30 @@ function shortenUrl(url) {
 
 // ---------- threads (rendered as right-angle circuit traces) ----------
 
+function openEditModal(node) {
+  editingNodeId = node.id;
+  fTitle.value = node.title;
+  fNotes.value = node.notes || "";
+  fUrl.value = node.url || "";
+  fCategory.value = node.category;
+  fAuthor.value = node.author || "";
+  document.getElementById("form-modal-title").textContent = "edit_window.exe";
+  addForm.querySelector('button[type="submit"]').textContent = "save_window";
+  modalBackdrop.classList.remove("hidden");
+  fTitle.focus();
+}
+
+function openAddModal() {
+  editingNodeId = null;
+  document.getElementById("form-modal-title").textContent = "new_window.exe";
+  addForm.querySelector('button[type="submit"]').textContent = "open_window";
+  // ...rest stays the same...
+
 function redrawThreads() {
   threadsSvg.innerHTML = "";
   edges.forEach((edge) => drawThread(edge));
 }
+
 
 function drawThread(edge) {
   const a = nodes.get(edge.source_id);
@@ -474,6 +525,41 @@ addForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const title = fTitle.value.trim();
   if (!title) return;
+
+  const fields = {
+    title,
+    notes: fNotes.value.trim(),
+    url: fUrl.value.trim() || null,
+    category: fCategory.value,
+    author: fAuthor.value.trim() || "anonymous",
+  };
+
+  const submitBtn = addForm.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+
+  let error, data;
+  if (editingNodeId) {
+    ({ error } = await sb.from("nodes").update(fields).eq("id", editingNodeId));
+  } else {
+    ({ data, error } = await sb.from("nodes").insert({
+      ...fields,
+      x: pendingSpawn.x,
+      y: pendingSpawn.y,
+      rotation: 0,
+    }).select().single());
+  }
+
+  submitBtn.disabled = false;
+
+  if (error) {
+    console.error(error);
+    alert(editingNodeId ? "edit failed — try again." : "window failed to open — try again in a moment.");
+    return;
+  }
+
+  if (data) addMyNode(data.id); // only fires on insert
+  closeAddModal();
+});
 
   const row = {
     title,
