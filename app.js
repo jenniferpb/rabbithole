@@ -554,10 +554,6 @@ function onCardClick(e, node) {
   });
 }
 
-  cardEls.get(connectSource.id).classList.remove("connect-source");
-  connectSource = null;
-}
-
 function setConnectMode(on) {
   connectMode = on;
   connectBanner.classList.toggle("hidden", !on);
