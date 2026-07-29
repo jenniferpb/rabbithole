@@ -184,6 +184,8 @@ function renderCard(node) {
   el.tabIndex = 0;
 
   const cat = CATEGORIES[node.category] || CATEGORIES.other;
+  const isTitleCard = !node.notes || !node.notes.trim();
+if (isTitleCard) el.classList.add("card-title-only");
 
   // titlebar: LED + subject + decorative window buttons
   const titlebar = document.createElement("div");
