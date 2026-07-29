@@ -196,6 +196,7 @@ function renderCard(node) {
   el.tabIndex = 0;
 
   const cat = CATEGORIES[node.category] || CATEGORIES.other;
+  el.style.setProperty("--glow-color", cat.color);
   const isTitleCard = !node.notes || !node.notes.trim();
 if (isTitleCard) el.classList.add("card-title-only");
 
@@ -271,6 +272,7 @@ if (isTitleCard) el.classList.add("card-title-only");
   wireCardDrag(el, node);
   el.addEventListener("click", (e) => onCardClick(e, node));
 
+  updateCardHighlight(el, node);
   cardsLayer.appendChild(el);
   cardEls.set(node.id, el);
 }
@@ -572,4 +574,50 @@ function wireControls() {
   });
 
   centerBoard();
+}
+
+function buildLegend() {
+  legend.innerHTML = "";
+  for (const key in CATEGORIES) {
+    const item = document.createElement("span");
+    item.className = "legend-item";
+    item.dataset.category = key;
+    const dot = document.createElement("span");
+    dot.className = "legend-dot";
+    dot.style.background = CATEGORIES[key].color;
+    dot.style.color = CATEGORIES[key].color;
+    const label = document.createElement("span");
+    label.textContent = CATEGORIES[key].label;
+    item.appendChild(dot);
+    item.appendChild(label);
+    item.addEventListener("click", () => toggleCategoryHighlight(key));
+    legend.appendChild(item);
+  }
+}
+
+let highlightedCategory = null;
+
+function toggleCategoryHighlight(key) {
+  highlightedCategory = highlightedCategory === key ? null : key;
+  legend.querySelectorAll(".legend-item").forEach((el) => {
+    el.classList.toggle("legend-item-active", el.dataset.category === highlightedCategory);
+  });
+  cardEls.forEach((el, id) => {
+    const node = nodes.get(id);
+    if (node) updateCardHighlight(el, node);
+  });
+}
+
+function updateCardHighlight(el, node) {
+  if (!highlightedCategory) {
+    el.classList.remove("card-glow", "card-dim");
+    return;
+  }
+  if (node.category === highlightedCategory) {
+    el.classList.add("card-glow");
+    el.classList.remove("card-dim");
+  } else {
+    el.classList.add("card-dim");
+    el.classList.remove("card-glow");
+  }
 }
