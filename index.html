@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jenn's rabbit holes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Share+Tech+Mono&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Splash: drop your own image in as splash.jpg (or edit the src below) -->
+<div id="splash" class="splash">
+  <img id="splash-img" src="splash.jpg" alt="" onerror="this.style.display='none'">
+  <div class="splash-hint">click anywhere / any key</div>
+</div>
+
+<header class="masthead">
+  <div class="masthead-left">
+    <h1>research<span class="blink">_</span>web</h1>
+    <p class="subtitle">// live node array — anyone may append</p>
+  </div>
+  <div class="masthead-right">
+    <button id="btn-connect" class="tool-btn" title="Trace a connection between two windows">trace()</button>
+    <button id="btn-add" class="tool-btn tool-btn-primary">+ new_window</button>
+    <button id="btn-center" class="tool-btn" title="Recenter the array">recenter()</button>
+  </div>
+</header>
+
+<div id="connect-banner" class="connect-banner hidden">
+  trace mode — click a window to start, click another to complete the circuit &nbsp;
+  <button id="btn-connect-cancel">abort</button>
+</div>
+
+<main id="board-viewport" class="board-viewport">
+  <div id="board" class="board">
+    <svg id="threads" class="threads"></svg>
+    <div id="cards-layer" class="cards-layer"></div>
+  </div>
+  <div id="empty-state" class="empty-state hidden">
+    <p>[ ARRAY EMPTY ]</p>
+    <p>open the first window</p>
+  </div>
+</main>
+
+<footer class="legend" id="legend"></footer>
+
+<!-- Add card modal -->
+<div id="modal-backdrop" class="modal-backdrop hidden">
+  <form id="add-form" class="card-form">
+    <div class="card-form-titlebar">
+      <span class="led-mini"></span>
+      <span>new_window.exe</span>
+    </div>
+    <div class="card-form-body">
+      <label for="f-title">subject</label>
+      <input id="f-title" maxlength="80" required placeholder="e.g. Coptic binding as citation">
+
+      <label for="f-notes">notes</label>
+      <textarea id="f-notes" maxlength="500" rows="4" placeholder="why it's in the array"></textarea>
+
+      <label for="f-url">link (optional)</label>
+      <input id="f-url" type="url" placeholder="https://">
+
+      <label for="f-category">category</label>
+      <select id="f-category"></select>
+
+      <label for="f-author">handle (optional)</label>
+      <input id="f-author" maxlength="40" placeholder="anonymous">
+
+      <div class="form-actions">
+        <button type="button" id="f-cancel" class="tool-btn">cancel</button>
+        <button type="submit" class="tool-btn tool-btn-primary">open_window</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
