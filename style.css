@@ -443,6 +443,24 @@ body::after {
   font-size: 0.78rem;
 }
 
+.card.card-title-only {
+  width: 280px;
+}
+
+.card.card-title-only .card-titlebar {
+  padding: 0.55rem 0.7rem;
+}
+
+.card.card-title-only .card-title {
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+}
+
+.card.card-title-only .card-content {
+  padding-top: 0.5rem;
+}
+
 .led-mini {
   width: 8px;
   height: 8px;
